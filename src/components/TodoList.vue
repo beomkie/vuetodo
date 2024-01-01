@@ -1,35 +1,34 @@
 <template>
-    <div class="mb-2 d-flex">
-        <div>
-            <input type="checkbox" :checked="todo.checked" @change="toggleCheckbox">
-        </div>
-      <span 
-        class="ml-3 flex-grow-1"
-        :class="todo.checked ? 'text-muted' : ''"
-        :style="todo.checked ? 'text-decoration: line-through' : ''">
-        {{ todo.text }}
-      </span>
-      <button class="btn btn-danger btn-sm" @click="clickDelete">Delete</button>
+    <div>
+        <TodoWord
+            v-for="todo in todos" 
+            :key="todo.id" 
+            :todo="todo" 
+            @toggle-checkbox="toggleCheckbox" 
+            @click-delete="deleteTodo" 
+        />
     </div>
 </template>
 
 <script>
+import TodoWord from '@/components/TodoWord.vue';
+
 export default {
+    components: {
+        TodoWord
+    },
     props: {
-        todo: {
-            type: Object,
+        todos: {
+            type: Array,
             required: true
         }
     },
     methods: {
-        toggleCheckbox(e) {
-            this.$emit('toggle-checkbox', {
-                id: this.todo.id,
-                checked: e.target.checked
-            })
+        toggleCheckbox(value) {
+            this.$emit('toggle-checkbox', value)
         },
-        clickDelete() {
-            this.$emit('click-delete', this.todo.id)
+        deleteTodo(todoId) {
+            this.$emit('click-delete', todoId);
         }
     }
 
